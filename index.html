@@ -19,6 +19,15 @@
         <h1 class="display-3">Work Day Scheduler</h1>
         <p class="lead">A simple calendar app for scheduling your work day</p>
         <p id="currentDay" class="lead"></p>
+        <p class="lead">Current Timeblock Increment: <span id="increment"></span></p>
+        <select id="increment-selector" class="form-select" aria-label="timeblock-increment-selector">
+            <option selected>Select Timeblock Increment</option>
+            <option value="60">60 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="20">20 minutes</option>
+            <option value="15">15 minutes</option>
+            <option value="10">10 minutes</option>
+        </select>
     </header>
     <div id="timeblocks" class="container">
     </div>

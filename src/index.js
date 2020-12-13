@@ -2,51 +2,51 @@
 const moment = require('moment');
 const startHour = 9;
 const dayDuration = 8;
-const timeBlockIncrement = 60;
 const now = moment();
 var currentDayHeader = document.querySelector('#currentDay');
 var scheduleBody = document.querySelector('#timeblocks');
+var incrementSelector = document.querySelector('#increment-selector');
+var currentIncrement = document.querySelector('#increment');
 var todaysEvents = [];
 var currentDayEventCode = moment().format('DD-MM-YYYY');
+var timeBlockIncrement;
 function init() {
+    scheduleBody.innerHTML = '';
     currentDayHeader.innerText = moment().format('LLL');
-    loadTimeBlocks();
-    formatTimeBlocks();
-    loadEvents();
+    var incrementExists = localStorage.getItem('timeBlockIncrement');
+    if (incrementExists !== null && !isNaN(Number(incrementExists))) {
+        timeBlockIncrement = Number(incrementExists);
+        currentIncrement.textContent = String(timeBlockIncrement) + ' minutes';
+        loadTimeBlocks();
+        loadEvents();
+    }
 }
 function loadTimeBlocks() {
+    var timeBlockFormats = ['future', 'present', 'past'];
     for (var i = 0; i <= (dayDuration * 60) / timeBlockIncrement; i++) {
-        var timeBlockHour = moment().startOf('day');
         var newTimeBlock = document.createElement('div');
         var newTimeBlockHeader = document.createElement('span');
         var newTimeBlockTextArea = document.createElement('textarea');
         var newTimeBlockButton = document.createElement('button');
         var newTimeBlockSaveIcon = document.createElement('span');
+        var timeBlock = moment()
+            .startOf('day')
+            .add(startHour * 60 + i * timeBlockIncrement, 'm');
+        var formatCondition = 0 + (timeBlock.isSame(now, 'hour') ? 1 : 0) + (timeBlock.isBefore(now, 'hour') ? 2 : 0);
         newTimeBlock.classList.add('input-group', 'row');
         newTimeBlockHeader.classList.add('input-group-text');
-        newTimeBlockTextArea.classList.add('form-control');
+        newTimeBlockTextArea.classList.add('form-control', timeBlockFormats[formatCondition]);
         newTimeBlockButton.classList.add('btn', 'btn-outline-secondary');
         newTimeBlockSaveIcon.classList.add('material-icons', 'md-light');
         newTimeBlock.setAttribute('data-time', String(i));
         newTimeBlockButton.type = 'button';
         newTimeBlockButton.addEventListener('click', (event) => saveEvent(event));
-        newTimeBlockHeader.innerText = timeBlockHour.add(startHour * 60 + i * timeBlockIncrement, 'm').format('hh:mm A');
+        newTimeBlockHeader.innerText = timeBlock.format('hh:mm A');
         newTimeBlockSaveIcon.innerText = 'save';
         newTimeBlockButton.appendChild(newTimeBlockSaveIcon);
         newTimeBlock.append(newTimeBlockHeader, newTimeBlockTextArea, newTimeBlockButton);
         scheduleBody.appendChild(newTimeBlock);
     }
-}
-function formatTimeBlocks() {
-    var timeBlockRows = document.querySelectorAll('.row');
-    var timeBlockFormats = ['future', 'present', 'past'];
-    timeBlockRows.forEach((item) => {
-        var timeBlockHour = moment().startOf('day');
-        var hour = Number(item.getAttribute('data-time'));
-        timeBlockHour = timeBlockHour.add(startHour * 60 + hour * timeBlockIncrement, 'm');
-        var formatCondition = 0 + (timeBlockHour.isSame(now, 'hour') ? 1 : 0) + (timeBlockHour.isBefore(now, 'hour') ? 2 : 0);
-        item.children[1].classList.add('class', timeBlockFormats[formatCondition]);
-    });
 }
 function loadEvents() {
     todaysEvents = JSON.parse(String(localStorage.getItem(currentDayEventCode)));
@@ -65,7 +65,6 @@ function loadEvents() {
 function saveEvent(event) {
     var timeBlockBody = event.currentTarget.parentNode;
     var timeBlockIndex = Number(timeBlockBody.dataset.time);
-    console.log(event.currentTarget);
     var newEvent = {
         id: String(timeBlockIncrement) + '-' + String(timeBlockIndex),
         increment: timeBlockIncrement,
@@ -75,9 +74,20 @@ function saveEvent(event) {
     todaysEvents = todaysEvents.filter((item) => {
         return item.id !== newEvent.id;
     });
-    console.log(todaysEvents);
     todaysEvents.push(newEvent);
     localStorage.setItem(currentDayEventCode, JSON.stringify(todaysEvents));
     loadEvents();
 }
+function getIncrement(event) {
+    timeBlockIncrement = Number(event.currentTarget.value);
+    if (!isNaN(timeBlockIncrement)) {
+        localStorage.setItem('timeBlockIncrement', String(timeBlockIncrement));
+    }
+    else {
+        localStorage.removeItem('timeBlockIncrement');
+        currentIncrement.textContent = '';
+    }
+    init();
+}
+incrementSelector.addEventListener('change', (event) => getIncrement(event));
 init();
