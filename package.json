@@ -1,0 +1,28 @@
+{
+	"name": "workday-schedule-jasibal",
+	"version": "1.0.0",
+	"description": "",
+	"private": true,
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "webpack"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/vicryt8/workday-schedule-jasibal.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/vicryt8/workday-schedule-jasibal/issues"
+	},
+	"homepage": "https://github.com/vicryt8/workday-schedule-jasibal#readme",
+	"devDependencies": {
+		"webpack": "^5.10.1",
+		"webpack-cli": "^4.2.0"
+	},
+	"dependencies": {
+		"moment": "^2.29.1"
+	}
+}
