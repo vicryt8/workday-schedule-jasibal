@@ -1,3 +1,4 @@
 node_modules/
 webpack.config.js
 main.js.LICENSE.txt
+tsconfig.json
