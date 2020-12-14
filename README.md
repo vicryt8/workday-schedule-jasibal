@@ -2,7 +2,7 @@
 
 ## Description
 
-A javascript project of a workday schedule. Allows the user to save events for each hour of the day. This app will run in the browser and feature dynamically updated HTML and CSS powered by jQuery.
+A javascript project of a workday schedule. Allows the user to save events for each hour of the day. This app runs in the browser and feature dynamically updated HTML and CSS powered by jQuery.
 
 ## Links
 
