@@ -12,7 +12,7 @@ var currentDayEventCode = moment().format('DD-MM-YYYY');
 var timeBlockIncrement;
 function init() {
     scheduleBody.innerHTML = '';
-    currentDayHeader.innerText = moment().format('LLL');
+    currentDayHeader.innerText = moment().format('DD MMMM YYYY');
     var incrementExists = localStorage.getItem('timeBlockIncrement');
     if (incrementExists !== null && !isNaN(Number(incrementExists))) {
         timeBlockIncrement = Number(incrementExists);
@@ -32,7 +32,16 @@ function loadTimeBlocks() {
         var timeBlock = moment()
             .startOf('day')
             .add(startHour * 60 + i * timeBlockIncrement, 'm');
-        var formatCondition = 0 + (timeBlock.isSame(now, 'hour') ? 1 : 0) + (timeBlock.isBefore(now, 'hour') ? 2 : 0);
+        var formatCondition = 0 +
+            (now.isBetween(moment()
+                .startOf('day')
+                .add(startHour * 60 + i * timeBlockIncrement, 'm'), moment()
+                .startOf('day')
+                .add(startHour * 60 + (i + 1) * timeBlockIncrement, 'm'))
+                ? 1
+                : 0) +
+            (now.isBefore(timeBlock, 'minute ') ? 2 : 0);
+        console.log(formatCondition);
         newTimeBlock.classList.add('input-group', 'row');
         newTimeBlockHeader.classList.add('input-group-text');
         newTimeBlockTextArea.classList.add('form-control', timeBlockFormats[formatCondition]);
