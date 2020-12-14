@@ -78,6 +78,10 @@ function loadTimeBlocks(): void {
 
 function loadEvents(): void {
 	todaysEvents = JSON.parse(String(localStorage.getItem(currentDayEventCode)));
+	todaysEvents = todaysEvents.filter((item) => {
+		console.log(item.eventText.length);
+		return item.eventText.length !== 0;
+	});
 	if (todaysEvents !== null) {
 		todaysEvents.forEach((item) => {
 			var incrementedIndex = item.index * (item.increment / timeBlockIncrement);
