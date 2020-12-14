@@ -56,7 +56,7 @@ function loadTimeBlocks(): void {
 			)
 				? 1
 				: 0) +
-			(now.isBefore(timeBlock, 'minute ') ? 2 : 0);
+			(now.isAfter(timeBlock, 'minute ') ? 2 : 0);
 		console.log(formatCondition);
 		newTimeBlock.classList.add('input-group', 'row');
 		newTimeBlockHeader.classList.add('input-group-text');
