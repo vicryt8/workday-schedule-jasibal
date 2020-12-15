@@ -59,10 +59,7 @@ function loadTimeBlocks() {
 }
 function loadEvents() {
     todaysEvents = JSON.parse(String(localStorage.getItem(currentDayEventCode)));
-    todaysEvents = todaysEvents.filter((item) => {
-        console.log(item.eventText.length);
-        return item.eventText.length !== 0;
-    });
+    console.log(todaysEvents);
     if (todaysEvents !== null) {
         todaysEvents.forEach((item) => {
             var incrementedIndex = item.index * (item.increment / timeBlockIncrement);
@@ -84,9 +81,11 @@ function saveEvent(event) {
         index: timeBlockIndex,
         eventText: String(timeBlockBody.children[1].value),
     };
-    todaysEvents = todaysEvents.filter((item) => {
-        return item.id !== newEvent.id;
-    });
+    if (todaysEvents.length > 0) {
+        todaysEvents = todaysEvents.filter((item) => {
+            return item.id !== newEvent.id;
+        });
+    }
     todaysEvents.push(newEvent);
     localStorage.setItem(currentDayEventCode, JSON.stringify(todaysEvents));
     loadEvents();
