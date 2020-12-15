@@ -57,7 +57,6 @@ function loadTimeBlocks(): void {
 				? 1
 				: 0) +
 			(now.isAfter(timeBlock, 'minute ') ? 2 : 0);
-		console.log(formatCondition);
 		newTimeBlock.classList.add('input-group', 'row');
 		newTimeBlockHeader.classList.add('input-group-text');
 		newTimeBlockTextArea.classList.add('form-control', timeBlockFormats[formatCondition]);
@@ -78,7 +77,6 @@ function loadTimeBlocks(): void {
 
 function loadEvents(): void {
 	todaysEvents = JSON.parse(String(localStorage.getItem(currentDayEventCode)));
-	console.log(todaysEvents);
 	if (todaysEvents !== null) {
 		todaysEvents.forEach((item) => {
 			var incrementedIndex = item.index * (item.increment / timeBlockIncrement);
